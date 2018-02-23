@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Call Soundboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+	<header>
+		<h1>Call {{lvn}} </h1>
+	</header>
+	<button onClick="send('english')">English MF</button>
+	<button onClick="send('asking')">Asking</button>
+	<button onClick="send('burger')">Tasty Burger</button>
+	<button onClick="send('medieval')">Medieval</button>
+	<button onClick="send('tps1')">TPS Reports 1</button>
+	<button onClick="send('tps2')">TPS Reports 2</button>
+	<hr>
+	<div id='text'>
+	</div>
+	<hr>
+	<footer>
+		Powered by The <a href="https://nexmo.com" target="_blank">Nexmo</a> Voice API
+	</footer>
+	<script>
+var ws
+
+function connect() {
+		ws = new WebSocket("ws://localhost:8080/browser");
+			ws.onopen = function() {
+						eventRecieved("CONNECTED");
+							};
+				ws.onmessage = function(event) {
+							eventRecieved(event.data);
+								};
+}
+
+function send(clip){
+		ws.send(clip);
+			eventRecieved("SENT: "+ clip);
+}
+
+function eventRecieved(data){
+	console.log(data);
+	textdiv = document.createElement("div");
+	textdiv.textContent = data;
+	document.getElementById('text').appendChild(textdiv);
+}
+
+connect();
+	</script>
+</body>
+</html>
